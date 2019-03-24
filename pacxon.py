@@ -3,12 +3,12 @@ from random import choice
 
 clock = pygame.time.Clock()
 done = False
-start_map_file = open( "tailmap_for_tests_big.txt", "r")
+start_map_file = open( "tests/tailmap_big.txt", "r")
 tile_map = [[int(n) for n in line.split()] for line in start_map_file]
 
 textures = {
-    1: pygame.image.load('occ.png'),
-    0: pygame.image.load('free.png')
+    1: pygame.image.load('images/occ.png'),
+    0: pygame.image.load('images/free.png')
 }
 
 tile_size = 25
@@ -20,7 +20,7 @@ screen_height = map_height * tile_size
 
 class Ghost:
     def __init__(self):
-        self.img = pygame.image.load('ghost.png')
+        self.img = pygame.image.load('images/ghost.png')
         self.width, self.height = self.img.get_rect().size
         self.speed = 2.5                                                # 12.5 divided by speed must give natural number
         self.x = map_width // 2 * tile_size + 0.5 * tile_size
@@ -46,6 +46,7 @@ class Ghost:
         x_ind = int(center_x / tile_size)
         y_ind = int(center_y / tile_size)
         collides = False
+        collisions = 0
 
         if dist_to_center_x < self.speed and dist_to_center_y < self.speed:
             collides = True
@@ -72,6 +73,9 @@ class Ghost:
             else:
                 collides = False
         if collides:
+            if collisions == 4:
+                pass #todo
+            collisions += 1
             self.check_collision()
 
 
