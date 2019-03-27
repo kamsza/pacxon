@@ -52,24 +52,32 @@ class Ghost:
             collides = True
             if tile_map[y_ind - 1][x_ind] and self.dy < 0:
                     self.dy = -self.dy
+                    return y_ind-1, x_ind
             elif tile_map[y_ind + 1][x_ind] and self.dy > 0:
                     self.dy = -self.dy
+                    return y_ind + 1, x_ind
             elif tile_map[y_ind][x_ind - 1] and self.dx < 0:
                     self.dx = -self.dx
+                    return y_ind, x_ind - 1
             elif tile_map[y_ind][x_ind + 1] and self.dx > 0:
                     self.dx = -self.dx
+                    return y_ind - 1, x_ind
             elif tile_map[y_ind - 1][x_ind + 1] and self.dx > 0 and self.dy < 0:
                     self.dx = -self.dx
                     self.dy = -self.dy
+                    return y_ind - 1, x_ind + 1
             elif tile_map[y_ind + 1][x_ind + 1] and self.dx > 0 and self.dy > 0:
                     self.dx = -self.dx
                     self.dy = -self.dy
+                    return y_ind + 1, x_ind + 1
             elif tile_map[y_ind + 1][x_ind - 1] and self.dx < 0 and self.dy > 0:
                     self.dx = -self.dx
                     self.dy = -self.dy
+                    return y_ind + 1, x_ind - 1
             elif tile_map[y_ind - 1][x_ind - 1] and self.dx < 0 and self.dy < 0:
                     self.dx = -self.dx
                     self.dy = -self.dy
+                    return y_ind - 1, x_ind - 1
             else:
                 collides = False
         if collides:
@@ -79,12 +87,24 @@ class Ghost:
             self.check_collision()
 
 
+class RedGhost(Ghost):
+    def __init__(self):
+        Ghost.__init__(self)
+        self.img = pygame.image.load('images/red_ghost.png')
+
+    def check_collision(self):
+        y, x = super().check_collision()
+        print(y)
+        print(x)
+
+
 pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
 ghosts = []
-for i in range(0, 9):
+for i in range(0, 1):
     ghosts.append(Ghost())
 
+ghosts.append(RedGhost())
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
