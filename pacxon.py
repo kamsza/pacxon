@@ -21,6 +21,7 @@ ghosts.append(BlueGhost())
 
 ghosts.append(RedGhost())
 
+ghosts.append(GreenGhost())
 
 while not done:
     for event in pygame.event.get():

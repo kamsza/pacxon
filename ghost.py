@@ -100,29 +100,31 @@ class RedGhost(Ghost):
         return True
 
 
-# class GreenGhost(Ghost):
-#     def __init__(self):
-#         super().__init__()
-#         self.img = pygame.image.load('images/green_ghost.png')
-#         self.img_width, self.img_height = self.img.get_rect().size
-#         self.x_vec = -1
-#         self.y_vec = 0
-#         self.x = (tilemap.width - 2) * tilemap.tile_size + 0.5 * tilemap.tile_size
-#         self.y = (tilemap.height - 2) * tilemap.tile_size + 0.5 * tilemap.tile_size
-#
-#     def check_collision(self, x_ind, y_ind):
-#         if tilemap.tile_map[y_ind][x_ind + self.x_vec]:
-#             self.y_vec = self.x_vec
-#             self.x_vec = 0
-#         elif tilemap.tile_map[y_ind + self.y_vec][x_ind]:
-#             self.x_vec = self.y_vec
-#             self.y_vec = 0
-#         elif tilemap.tile_map[y_ind + 1][x_ind] == 0 and tilemap.tile_map[y_ind + 1][x_ind - self.x_val]:
-#             self.y_vec = 1
-#             self.x_vec = 0
-#         elif tilemap.tile_map[y_ind - 1][x_ind] == 0 and tilemap.tile_map[y_ind -1][x_ind - self.x_val]:
-#             self.y_vec = 1
-#             self.x_vec = 0
-#         else:
-#             return False
-#         return True
+class GreenGhost(Ghost):
+    def __init__(self):
+        super().__init__()
+        self.img = pygame.image.load('images/green_ghost.png')
+        self.img_width, self.img_height = self.img.get_rect().size
+        self.x_vec = -1
+        self.y_vec = 0
+        self.x = (tilemap.width - 2) * tilemap.tile_size
+        self.y = (tilemap.height - 2) * tilemap.tile_size
+
+    def check_collision(self, x_ind, y_ind):
+        if tilemap.tile_map[y_ind][x_ind + self.x_vec]:
+            self.y_vec = self.x_vec
+            self.x_vec = 0
+        elif tilemap.tile_map[y_ind + self.y_vec][x_ind]:
+            self.x_vec = -self.y_vec
+            self.y_vec = 0
+        elif self.x_vec and tilemap.tile_map[y_ind - self.x_vec][x_ind] == 0:
+            self.y_vec = -self.x_vec
+            self.x_vec = 0
+            return False
+        elif self.y_vec and tilemap.tile_map[y_ind][x_ind + self.y_vec] == 0:
+            self.x_vec = self.y_vec
+            self.y_vec = 0
+            return False
+        else:
+            return False
+        return True
