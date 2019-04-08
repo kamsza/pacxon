@@ -128,3 +128,28 @@ class GreenGhost(Ghost):
         else:
             return False
         return True
+
+
+class OrangeGhost(Ghost):
+    def __init__(self):
+        super().__init__()
+        self.img = pygame.image.load('images/orange_ghost.png')
+        self.img_width, self.img_height = self.img.get_rect().size
+        self.x_vec = choice([-1, 1])
+        self.y_vec = choice([-1, 1])
+        self.x = (tilemap.width - 3) * tilemap.tile_size + 0.5 * tilemap.tile_size  # for tests
+        self.y = 2 * tilemap.tile_size + 0.5 * tilemap.tile_size
+        # self.x = randint(3, tilemap.width - 4) * tilemap.tile_size + 0.5 * tilemap.tile_size    # default
+        # self.y = randint(3, tilemap.height - 4) * tilemap.tile_size + 0.5 * tilemap.tile_size
+
+    def check_collision(self, x_ind, y_ind):
+        if tilemap.tile_map[y_ind][x_ind + self.x_vec] in [0, 2]:
+            self.x_vec = -self.x_vec
+        elif tilemap.tile_map[y_ind + self.y_vec][x_ind] in [0, 2]:
+            self.y_vec = -self.y_vec
+        elif tilemap.tile_map[y_ind + self.y_vec][x_ind + self.x_vec] in [0, 2]:
+            self.x_vec = -self.x_vec
+            self.y_vec = -self.y_vec
+        else:
+            return False
+        return True
