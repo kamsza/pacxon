@@ -1,6 +1,8 @@
 import pygame
 from ghost import *
 import tilemap
+import pacman
+
 
 
 clock = pygame.time.Clock()
@@ -24,7 +26,7 @@ ghosts.append(RedGhost())
 ghosts.append(GreenGhost())
 
 ghosts.append(OrangeGhost())
-
+pacman1 = pacman.Pacman()
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -35,7 +37,22 @@ while not done:
     for ghost in ghosts:
         ghost.draw(screen)
         ghost.move()
-
+    key = pygame.key.get_pressed()
+    direction = (0,0)
+    if key[pygame.K_RIGHT]:
+        direction = (1, 0)
+        pacman1.img =  pygame.image.load('images/pacman_prawo.png')
+    if key[pygame.K_LEFT]:
+        direction = (-1, 0)
+        pacman1.img = pygame.image.load('images/pacman_lewo.png')
+    if key[pygame.K_DOWN]:
+        direction = (0, 1)
+        pacman1.img = pygame.image.load('images/pacman_dol.png')
+    if key[pygame.K_UP]:
+        direction = (0, -1)
+        pacman1.img = pygame.image.load('images/pacman_gora.png')
+    pacman1.draw(screen)
+    pacman1.move(direction)
     pygame.display.flip()
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(20)
