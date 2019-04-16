@@ -1,6 +1,7 @@
 import pygame
 
 textures = {
+    3: pygame.image.load('images/occ.png'),
     2: pygame.image.load('images/occ.png'),
     1: pygame.image.load('images/occ.png'),
     0: pygame.image.load('images/free.png')
