@@ -3,6 +3,7 @@ import tilemap
 from abc import ABC, abstractmethod
 
 
+# abstract class
 class MovingObject(ABC):
     def __init__(self, img):
         self.width = tilemap.tile_size
@@ -15,10 +16,10 @@ class MovingObject(ABC):
         self.y_vec = 0
         self.speed = 0
 
-    def draw(self, screen):
+    def draw(self):
         img_x = self.x + (tilemap.tile_size - self.img_width) / 2
         img_y = self.y + (tilemap.tile_size - self.img_height) / 2
-        screen.blit(self.img, (img_x, img_y))
+        tilemap.screen.blit(self.img, (img_x, img_y))
 
     def move(self):
         # check_move() is used only if object is in the middle of a tile
@@ -30,3 +31,7 @@ class MovingObject(ABC):
     @abstractmethod
     def check_move(self):
         pass
+
+    def action(self):
+        self.move()
+        self.draw()

@@ -7,9 +7,7 @@ done = False
 
 pygame.init()
 tilemap.init("tests/tile_map_big.txt")
-#tilemap.init("tilemap.txt")
-
-screen = pygame.display.set_mode((tilemap.width * tilemap.tile_size, tilemap.height * tilemap.tile_size))
+# tilemap.init("tilemap.txt")
 
 ghosts = list()
 
@@ -28,14 +26,12 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    tilemap.draw(screen)
+    tilemap.draw()
 
     for ghost in ghosts:
-        ghost.draw(screen)
-        ghost.move()
+        ghost.action()
 
-    pacman.draw(screen)
-    pacman.move()
+    pacman.action()
 
     pygame.display.flip()
     pygame.display.update()

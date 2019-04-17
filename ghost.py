@@ -5,6 +5,7 @@ from random import choice
 from abc import ABC, abstractmethod
 
 
+# abstract class
 class Ghost(MovingObject, ABC):
     def __init__(self, img):
         super().__init__(img)
@@ -13,10 +14,11 @@ class Ghost(MovingObject, ABC):
     def check_move(self):
         x_ind = tilemap.row_num(self.x + self.width / 2)
         y_ind = tilemap.col_num(self.y + self.height / 2)
+
         collisions = 0
         collides = self.check_collision(x_ind, y_ind)
-
         while collides:
+            # if ghost is stuck - freeze him
             if collisions == 4:
                 self.speed = 0
                 self.img = pygame.image.load('images/frozen_ghost.png')
@@ -39,10 +41,13 @@ class BlueGhost(Ghost):
         self.y_vec = choice([-1, 1])
 
     def check_collision(self, x_ind, y_ind):
+        # next field horizontally
         if tilemap.tile_map[y_ind][x_ind + self.x_vec]:
             self.x_vec = -self.x_vec
-        elif tilemap.tile_map[y_ind + self.y_vec][x_ind]:
+        # next field vertically
+        if tilemap.tile_map[y_ind + self.y_vec][x_ind]:
             self.y_vec = -self.y_vec
+        # checking corner
         elif tilemap.tile_map[y_ind + self.y_vec][x_ind + self.x_vec]:
             self.x_vec = -self.x_vec
             self.y_vec = -self.y_vec
@@ -60,6 +65,7 @@ class RedGhost(Ghost):
         self.y_vec = choice([-1, 1])
 
     def check_collision(self, x_ind, y_ind):
+        # same as in BlueGhost + can destroy hit occupied tiles
         if tilemap.tile_map[y_ind][x_ind + self.x_vec]:
             if tilemap.tile_map[y_ind + self.y_vec][x_ind + self.x_vec] != 2:
                 tilemap.tile_map[y_ind][x_ind + self.x_vec] = 0
@@ -86,6 +92,7 @@ class GreenGhost(Ghost):
         self.x = (tilemap.width - 2) * tilemap.tile_size
         self.y = (tilemap.height - 2) * tilemap.tile_size
 
+    # moves along occupied fields
     def check_collision(self, x_ind, y_ind):
         if tilemap.tile_map[y_ind][x_ind + self.x_vec]:
             self.y_vec = self.x_vec
@@ -114,6 +121,7 @@ class OrangeGhost(Ghost):
         self.x_vec = choice([-1, 1])
         self.y_vec = choice([-1, 1])
 
+    # bounces off unoccupied fields and screen edges
     def check_collision(self, x_ind, y_ind):
         if tilemap.tile_map[y_ind][x_ind + self.x_vec] in [0, 2]:
             self.x_vec = -self.x_vec
