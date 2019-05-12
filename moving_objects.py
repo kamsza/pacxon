@@ -6,15 +6,15 @@ from abc import ABC, abstractmethod
 # abstract class
 class MovingObject(ABC):
     def __init__(self, img):
-        self.width = tilemap.tile_size
-        self.height = tilemap.tile_size
-        self.img = pygame.image.load(img)
-        self.img_width, self.img_height = self.img.get_rect().size
         self.x = 0
         self.y = 0
         self.x_vec = 0
         self.y_vec = 0
         self.speed = 0
+        self.width = tilemap.tile_size
+        self.height = tilemap.tile_size
+        self.img = pygame.image.load(img)
+        self.img_width, self.img_height = self.img.get_rect().size
 
     def draw(self):
         img_x = self.x + (tilemap.tile_size - self.img_width) / 2

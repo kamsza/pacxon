@@ -51,17 +51,14 @@ class Pacman(MovingObject):
 
     # jedna z opcji zaznaczania śladu pacmana
         self.mark_tile(x_ind, y_ind)
-        self.mark_area()
 
     def mark_tile(self, x_ind, y_ind):
         if tilemap.tile_map[y_ind][x_ind] == 0:
             tilemap.tile_map[y_ind][x_ind] = 3
             self.marked_tiles.append((x_ind, y_ind))
-        elif self.mark_tile:
+        elif self.marked_tiles:
+            tilemap.mark_area()
             for (x, y) in self.marked_tiles:
                 if tilemap.tile_map[y][x] == 3:  # ten if wyleci - uderzenie duszka ma zabić pacmana
                     tilemap.tile_map[y][x] = 1
-
-    # jak zaznaczyć cały obszar ???
-    def mark_area(self):
-        pass
+                self.marked_tiles.remove((x, y))
