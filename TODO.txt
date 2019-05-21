@@ -1,0 +1,15 @@
+* dodawanie pomarañczowych duszków w trakcie gry 	OK
+
+* liczenie zajêtego pola 	OK
+
+* wyœwietlanie ¿yæ pacmana i zajêtego pola na ekranie gry 	OK
+
+* okno game over / you win
+
+* ³adowanie wartoœci pocz¹tkowych z jakiegoœ pliku
+
+* bonusy przyspieszaj¹ce pacana / spowalniaj¹ce duszki / ...
+
+* okno menu
+
+* podzia³ na levele

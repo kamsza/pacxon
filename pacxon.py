@@ -1,26 +1,27 @@
-from ghost import *
-#import tilemap
-from pacman import *
-from moving_objects import *
+import pygame
+import ghost
+import tilemap
+import pacman
 
 clock = pygame.time.Clock()
 done = False
 
 pygame.init()
-tilemap.init("tests/tile_map_big.txt")
-#tilemap.init("tilemap.txt")
+tilemap.init("default_tile_map.txt")
 
-objects = list()
+tilemap.objects.append(pacman.Pacman())
 
-objects.append(BlueGhost())
-
-objects.append(RedGhost())
-
-objects.append(GreenGhost())
-
-objects.append(OrangeGhost())
-
-objects.append(Pacman())
+tilemap.objects.append(ghost.BlueGhost())
+#
+# tilemap.objects.append(ghost.BlueGhost())
+#
+# tilemap.objects.append(ghost.BlueGhost())
+#
+# tilemap.objects.append(ghost.BlueGhost())
+#
+# tilemap.objects.append(ghost.RedGhost())
+#
+# tilemap.objects.append(ghost.GreenGhost())
 
 
 while not done:
@@ -30,20 +31,9 @@ while not done:
 
     tilemap.draw()
 
-    for o in objects:
+    for o in tilemap.objects:
         o.action()
 
     pygame.display.flip()
     pygame.display.update()
     clock.tick(60)
-
-
-def ghost_position():
-    global objects
-    pos = []
-
-    for o in objects:
-        if isinstance(o, Ghost):
-            pos.append((tilemap.row_num(o.x), tilemap.col_num(o.y)))
-
-    return pos

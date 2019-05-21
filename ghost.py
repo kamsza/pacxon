@@ -1,149 +1,191 @@
 import pygame
 import tilemap
-from moving_objects import MovingObject
-from random import choice
+from random import choice, randint
 from abc import ABC, abstractmethod
+from moving_objects import MovingObject
 
 
 # abstract class
 class Ghost(MovingObject, ABC):
     def __init__(self, img):
         super().__init__(img)
-        self.speed = 2
+        self.id = -1
+        self.speed = 3
+        self.x = randint(5, tilemap.width - 5) * tilemap.tile_size + 0.5 * tilemap.tile_size
+        self.y = randint(5, tilemap.height - 5) * tilemap.tile_size + 0.5 * tilemap.tile_size
+        self.x_vec = choice([-1, 1])
+        self.y_vec = choice([-1, 1])
+        self.x_ind = tilemap.row_num(self.x)
+        self.y_ind = tilemap.col_num(self.y)
 
     def check_move(self):
-        x_ind = tilemap.row_num(self.x + self.width / 2)
-        y_ind = tilemap.col_num(self.y + self.height / 2)
+        x_ind = tilemap.row_num(self.x + self.img_width / 2)
+        y_ind = tilemap.col_num(self.y + self.img_height / 2)
+        self.update_position(x_ind, y_ind)
 
         collisions = 0
-        collides = self.check_collision(x_ind, y_ind)
+        collides = self.check_collision()
         while collides:
+            if self.handle_collision(collides):
+                tilemap.kill()
             # if ghost is stuck - freeze him
-            if collisions == 4:
+            if collisions == 8:
                 self.speed = 0
                 self.img = pygame.image.load('images/frozen_ghost.png')
                 collides = False
             else:
                 collisions += 1
-                collides = self.check_collision(x_ind, y_ind)
-        else:
-            self.update_position(x_ind, y_ind)
+                collides = self.check_collision()
 
-    def update_position(self, x_ind, y_ind):
-        (old_x, old_y) = self.position
+    def update_position(self, new_x, new_y):
+        old_x, old_y = self.x_ind, self.y_ind
         tilemap.tile_map[old_y][old_x] = 0
-        tilemap.tile_map[y_ind][x_ind] = -1
-        self.position = (x_ind, y_ind)
+        tilemap.tile_map[new_y][new_x] = self.id
+        self.x_ind, self.y_ind = new_x, new_y
 
     @abstractmethod
-    def check_collision(self, x_ind, y_ind):
+    def check_collision(self):
+        pass
+
+    @abstractmethod
+    def handle_collision(self, colliding_vec):
         pass
 
 
 class BlueGhost(Ghost):
-    def __init__(self):
-        super().__init__('images/blue_ghost.png')
-        self.x = tilemap.width // 2 * tilemap.tile_size + 0.5 * tilemap.tile_size  # for tests
-        self.y = tilemap.height // 2 * tilemap.tile_size + 0.5 * tilemap.tile_size
-        self.x_vec = choice([-1, 1])
-        self.y_vec = choice([-1, 1])
-        self.position = (tilemap.row_num(self.x), tilemap.col_num(self.y))
+    def __init__(self, img='images/blue_ghost.png'):
+        super().__init__(img)
 
-    def check_collision(self, x_ind, y_ind):
+    def check_collision(self):
         # next field horizontally
-        if tilemap.tile_map[y_ind][x_ind + self.x_vec] > 0:
-            self.x_vec = -self.x_vec
+        if tilemap.tile_map[self.y_ind][self.x_ind + self.x_vec] > 0:
+            return self.x_vec, 0
         # next field vertically
-        if tilemap.tile_map[y_ind + self.y_vec][x_ind] > 0:
-            self.y_vec = -self.y_vec
-        # checking corner
-        elif tilemap.tile_map[y_ind + self.y_vec][x_ind + self.x_vec] > 0:
-            self.x_vec = -self.x_vec
-            self.y_vec = -self.y_vec
+        elif tilemap.tile_map[self.y_ind + self.y_vec][self.x_ind] > 0:
+            return 0, self.y_vec
+        # next corner
+        elif tilemap.tile_map[self.y_ind + self.y_vec][self.x_ind + self.x_vec] > 0:
+            return self.x_vec, self.y_vec
         else:
-            return False
-        return True
+            return ()
+
+    def handle_collision(self, colliding_vec):
+        x_col, y_col = colliding_vec
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] in [1, 2]:
+            # change moving direction
+            if x_col:
+                self.x_vec = -self.x_vec
+            if y_col:
+                self.y_vec = -self.y_vec
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
+            return "KILL"
+        return 0
 
 
-class RedGhost(Ghost):
+class RedGhost(BlueGhost):
     def __init__(self):
         super().__init__('images/red_ghost.png')
-        self.x = tilemap.width // 2 * tilemap.tile_size + 0.5 * tilemap.tile_size  # for tests
-        self.y = tilemap.height // 2 * tilemap.tile_size + 0.5 * tilemap.tile_size
-        self.x_vec = choice([-1, 1])
-        self.y_vec = choice([-1, 1])
-        self.position = (tilemap.row_num(self.x), tilemap.col_num(self.y))
 
-    def check_collision(self, x_ind, y_ind):
-        # same as in BlueGhost + can destroy hit occupied tiles
-        if tilemap.tile_map[y_ind][x_ind + self.x_vec] > 0:
-            if tilemap.tile_map[y_ind + self.y_vec][x_ind + self.x_vec] != 2:
-                tilemap.tile_map[y_ind][x_ind + self.x_vec] = 0
-            self.x_vec = -self.x_vec
-        elif tilemap.tile_map[y_ind + self.y_vec][x_ind] > 0:
-            if tilemap.tile_map[y_ind + self.y_vec][x_ind + self.x_vec] != 2:
-                tilemap.tile_map[y_ind + self.y_vec][x_ind] = 0
-            self.y_vec = -self.y_vec
-        elif tilemap.tile_map[y_ind + self.y_vec][x_ind + self.x_vec] > 0:
-            if tilemap.tile_map[y_ind + self.y_vec][x_ind + self.x_vec] != 2:
-                tilemap.tile_map[y_ind + self.y_vec][x_ind + self.x_vec] = 0
-            self.x_vec = -self.x_vec
-            self.y_vec = -self.y_vec
-        else:
-            return False
-        return True
+    def handle_collision(self, colliding_vec):
+        x_col, y_col = colliding_vec
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 1:
+            # change moving direction
+            if x_col:
+                self.x_vec = -self.x_vec
+            if y_col:
+                self.y_vec = -self.y_vec
+            # destroy hit occupied tiles
+            tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] = 0
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 2:
+            # change moving direction
+            if x_col:
+                self.x_vec = -self.x_vec
+            if y_col:
+                self.y_vec = -self.y_vec
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
+            return "KILL"
+        return 0
 
 
 class GreenGhost(Ghost):
     def __init__(self):
         super().__init__('images/green_ghost.png')
-        self.x_vec = -1
-        self.y_vec = 0
-        self.x = (tilemap.width - 2) * tilemap.tile_size
-        self.y = (tilemap.height - 2) * tilemap.tile_size
-        self.position = (tilemap.row_num(self.x), tilemap.col_num(self.y))
+        self.x_ind = tilemap.width - 2
+        self.y_ind = tilemap.height - 2
+        self.x_vec = choice([-1, 0])
+        self.y_vec = 0 if self.x_vec else -1
+        self.x = self.x_ind * tilemap.tile_size + self.x_vec * self.speed
+        self.y = self.y_ind * tilemap.tile_size + self.y_vec * self.speed
+        self.changed_dir = 0
 
-    # moves along occupied fields
-    def check_collision(self, x_ind, y_ind):
-        if tilemap.tile_map[y_ind][x_ind + self.x_vec] > 0:
-            self.y_vec = self.x_vec
-            self.x_vec = 0
-        elif tilemap.tile_map[y_ind + self.y_vec][x_ind] > 0:
-            self.x_vec = -self.y_vec
-            self.y_vec = 0
-        elif self.x_vec and tilemap.tile_map[y_ind - self.x_vec][x_ind] == 0:
-            self.y_vec = -self.x_vec
-            self.x_vec = 0
-            return False
-        elif self.y_vec and tilemap.tile_map[y_ind][x_ind + self.y_vec] == 0:
-            self.x_vec = self.y_vec
-            self.y_vec = 0
-            return False
+        # moves along occupied fields
+    def check_collision(self):
+        if tilemap.tile_map[self.y_ind + self.y_vec][self.x_ind + self.x_vec] > 0:
+            return self.x_vec, self.y_vec
+        elif not self.changed_dir and tilemap.tile_map[self.y_ind - self.x_vec][self.x_ind + self.y_vec] == 0:
+            return self.y_vec, -self.x_vec
         else:
-            return False
-        return True
+            self.changed_dir = 0
+            return ()
+
+    def handle_collision(self, colliding_vec):
+        x_col, y_col = colliding_vec
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 0:
+            # change moving direction
+            if y_col:
+                self.y_vec = -self.x_vec
+                self.x_vec = 0
+            if x_col:
+                self.x_vec = self.y_vec
+                self.y_vec = 0
+            self.changed_dir = 1
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] in [1, 2]:
+            # change moving direction
+            if x_col:
+                self.y_vec = self.x_vec
+                self.x_vec = 0
+            if y_col:
+                self.x_vec = -self.y_vec
+                self.y_vec = 0
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
+            return "KILL"
+        return 0
 
 
 class OrangeGhost(Ghost):
-    def __init__(self):
+    def __init__(self, x_ind, y_ind):
         super().__init__('images/orange_ghost.png')
-        self.x = (tilemap.width - 3) * tilemap.tile_size + 0.5 * tilemap.tile_size  # for tests
-        self.y = 2 * tilemap.tile_size + 0.5 * tilemap.tile_size
-        self.x_vec = choice([-1, 1])
-        self.y_vec = choice([-1, 1])
+        self.id = 4
+        self.x_ind = x_ind
+        self.y_ind = y_ind
+        self.x = x_ind * tilemap.tile_size + 0.5 * tilemap.tile_size
+        self.y = y_ind * tilemap.tile_size + 0.5 * tilemap.tile_size
 
     # bounces off unoccupied fields and screen edges
-    def check_collision(self, x_ind, y_ind):
-        if tilemap.tile_map[y_ind][x_ind + self.x_vec] in [0, 2]:
-            self.x_vec = -self.x_vec
-        elif tilemap.tile_map[y_ind + self.y_vec][x_ind] in [0, 2]:
-            self.y_vec = -self.y_vec
-        elif tilemap.tile_map[y_ind + self.y_vec][x_ind + self.x_vec] in [0, 2]:
-            self.x_vec = -self.x_vec
-            self.y_vec = -self.y_vec
+    def check_collision(self):
+        if tilemap.tile_map[self.y_ind][self.x_ind + self.x_vec] in [0, 2]:
+            return self.x_vec, 0
+        elif tilemap.tile_map[self.y_ind + self.y_vec][self.x_ind] in [0, 2]:
+            return 0, self.y_vec
+        elif tilemap.tile_map[self.y_ind + self.y_vec][self.x_ind + self.x_vec] in [0, 2]:
+            return self.x_vec, self.y_vec
         else:
-            return False
-        return True
+            return ()
 
-    def update_position(self, x_ind, y_ind):
-        pass
+    def handle_collision(self, colliding_vec):
+        x_col, y_col = colliding_vec
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] in [0, 2]:
+            # change moving direction
+            if x_col:
+                self.x_vec = -self.x_vec
+            if y_col:
+                self.y_vec = -self.y_vec
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
+            return "KILL"
+        return 0
+
+    def update_position(self, new_x, new_y):
+        old_x, old_y = self.x_ind, self.y_ind
+        tilemap.tile_map[old_y][old_x] = 1
+        tilemap.tile_map[new_y][new_x] = self.id
+        self.x_ind, self.y_ind = new_x, new_y
