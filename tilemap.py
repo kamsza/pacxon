@@ -3,6 +3,7 @@ import random
 import pygame
 import numpy
 from scipy.ndimage import label
+import control
 
 objects = list()
 
@@ -23,7 +24,6 @@ height = 0
 screen = None
 
 orange_ghosts = 0
-
 
 map_fields = 0
 marked_fields = 0
@@ -82,6 +82,8 @@ def mark_path(path):
     while path:
         (x, y) = path.pop()
         tile_map[y][x] = 1
+    if round(100 * marked_fields / map_fields) > 80:
+        control.win()
 
 
 def mark_area():
@@ -114,17 +116,32 @@ def mark_area():
                     pos = random.sample(a, 1)
                     y, x = pos[0]
                     add_orange_ghost(x, y)
+    if round(100 * marked_fields / map_fields) > 80:
+        control.win()
 
 
 def add_orange_ghost(x_ind, y_ind):
     global orange_ghosts
+    print(x_ind, y_ind)
+    if tile_map[y_ind][x_ind] != 1:
+        return
     objects.append(ghost.OrangeGhost(x_ind, y_ind))
     orange_ghosts -= 1
+
+
+def set_orange_ghost_number(n):
+    global orange_ghosts
+    orange_ghosts = n
 
 
 def kill():
     objects[0].kill()
 
 
-def end_game():
-    print("THIS IS THE END")
+def clear():
+    global tile_map, objects, orange_ghosts, map_fields, marked_fields
+    del objects[:]
+    tile_map = [[int(n) for n in line.split()] for line in open(file, "r")]
+    orange_ghosts = 0
+    map_fields = 0
+    marked_fields = 0

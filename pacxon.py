@@ -1,33 +1,18 @@
 import pygame
-import ghost
+import load
 import tilemap
-import pacman
+import control
 
 clock = pygame.time.Clock()
-done = False
 
 pygame.init()
-tilemap.init("default_tile_map.txt")
 
-tilemap.objects.append(pacman.Pacman())
+load.init()
 
-tilemap.objects.append(ghost.BlueGhost())
-#
-# tilemap.objects.append(ghost.BlueGhost())
-#
-# tilemap.objects.append(ghost.BlueGhost())
-#
-# tilemap.objects.append(ghost.BlueGhost())
-#
-# tilemap.objects.append(ghost.RedGhost())
-#
-# tilemap.objects.append(ghost.GreenGhost())
-
-
-while not done:
+while not control.done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            done = True
+            control.done = True
 
     tilemap.draw()
 

@@ -4,7 +4,7 @@
 
 * wyœwietlanie ¿yæ pacmana i zajêtego pola na ekranie gry 	OK
 
-* okno game over / you win
+* okno game over / you win      OK
 
 * ³adowanie wartoœci pocz¹tkowych z jakiegoœ pliku
 
@@ -13,3 +13,5 @@
 * okno menu
 
 * podzia³ na levele
+
+* naprawiæ bugi

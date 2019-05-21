@@ -1,5 +1,6 @@
 import pygame
 import tilemap
+import control
 from moving_objects import MovingObject
 
 
@@ -15,9 +16,6 @@ class Pacman(MovingObject):
         x_ind = tilemap.row_num(self.x + self.img_width / 2)
         y_ind = tilemap.col_num(self.y + self.img_height / 2)
         self.update_position(x_ind, y_ind)
-
-        if tilemap.tile_map[y_ind][x_ind] in [-1, 3, 4]:
-            self.kill()
 
         key = pygame.key.get_pressed()
 
@@ -66,14 +64,16 @@ class Pacman(MovingObject):
             del self.marked_tiles[:]
 
     def update_position(self, new_x, new_y):
-        # old_x, old_y = self.x_ind, self.y_ind
-        self.x_ind, self.y_ind = new_x, new_y
+        if tilemap.tile_map[new_y][new_x] in [-1, 3, 4]:
+            self.kill()
+        else:
+            self.x_ind, self.y_ind = new_x, new_y
 
     def kill(self):
         self.lives -= 1
 
         if not self.lives:
-            tilemap.end_game()
+            control.game_over()
 
         self.x_ind = 0
         self.y_ind = 2
