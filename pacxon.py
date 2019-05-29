@@ -11,7 +11,7 @@ pygame.init()
 
 #tilemap.init_from_file("default_tile_map.txt")
 tilemap.init(43, 28)
-tilemap_objects.init(4, 2, 1, 3)
+tilemap_objects.init()
 
 while not control.done:
     for event in pygame.event.get():

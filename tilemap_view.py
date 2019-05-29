@@ -1,6 +1,6 @@
 import pygame
 import tilemap
-import tilemap_objects
+import stats
 
 textures = {
     5: pygame.image.load('images/upper_bar.png'),   # statistics
@@ -31,8 +31,8 @@ logo = pygame.image.load('images/logo.png')
 
 
 def draw_bar():
-    lives = 3 #tilemap.objects[0].lives
-    max_lives = 2 #tilemap.objects[0].LIVES
+    lives = stats.player_lives
+    max_lives = stats.lives
     for l in range(0, lives):
         tilemap.screen.blit(heart_red, (l * tilemap.TILE_SIZE + 2, tilemap.TILE_SIZE - 2))
     for l in range(lives, max_lives):
@@ -50,6 +50,9 @@ DARKEN_VAL = 35
 
 
 def game_over_view():
+    draw_map()
+    draw_bar()
+
     # dim the background
     dark = pygame.Surface((tilemap.WIDTH * tilemap.TILE_SIZE, tilemap.HEIGHT * tilemap.TILE_SIZE),
                           flags=pygame.SRCALPHA)

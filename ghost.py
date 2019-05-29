@@ -27,8 +27,8 @@ class Ghost(MovingObject, ABC):
         collisions = 0
         collides = self.check_collision()
         while collides:
-            if self.handle_collision(collides):
-                tilemap.kill()
+            self.handle_collision(collides)
+
             # if ghost is stuck - freeze him
             if collisions == 8:
                 self.speed = 0
@@ -79,8 +79,7 @@ class BlueGhost(Ghost):
             if y_col:
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
-            return "KILL"
-        return 0
+            tilemap_objects.kill_player()
 
 
 class RedGhost(BlueGhost):
@@ -104,8 +103,7 @@ class RedGhost(BlueGhost):
             if y_col:
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
-            return "KILL"
-        return 0
+            tilemap_objects.kill_player()
 
 
 class GreenGhost(Ghost):
@@ -149,8 +147,7 @@ class GreenGhost(Ghost):
                 self.x_vec = -self.y_vec
                 self.y_vec = 0
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
-            return "KILL"
-        return 0
+            tilemap_objects.kill_player()
 
 
 class OrangeGhost(Ghost):
@@ -182,8 +179,7 @@ class OrangeGhost(Ghost):
             if y_col:
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
-            return "KILL"
-        return 0
+            tilemap_objects.kill_player()
 
     def update_position(self, new_x, new_y):
         old_x, old_y = self.x_ind, self.y_ind
