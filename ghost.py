@@ -1,5 +1,6 @@
 import pygame
 import tilemap
+import tilemap_objects
 from random import choice, randint
 from abc import ABC, abstractmethod
 from moving_objects import MovingObject
@@ -11,8 +12,8 @@ class Ghost(MovingObject, ABC):
         super().__init__(img)
         self.id = -1
         self.speed = 3
-        self.x = randint(5, tilemap.width - 5) * tilemap.tile_size + 0.5 * tilemap.tile_size
-        self.y = randint(5, tilemap.height - 5) * tilemap.tile_size + 0.5 * tilemap.tile_size
+        self.x = randint(5, tilemap.WIDTH - 5) * tilemap.TILE_SIZE + 0.5 * tilemap.TILE_SIZE
+        self.y = randint(5, tilemap.HEIGHT - 5) * tilemap.TILE_SIZE + 0.5 * tilemap.TILE_SIZE
         self.x_vec = choice([-1, 1])
         self.y_vec = choice([-1, 1])
         self.x_ind = tilemap.row_num(self.x)
@@ -110,12 +111,12 @@ class RedGhost(BlueGhost):
 class GreenGhost(Ghost):
     def __init__(self):
         super().__init__('images/green_ghost.png')
-        self.x_ind = tilemap.width - 2
-        self.y_ind = tilemap.height - 2
+        self.x_ind = tilemap.WIDTH - 2
+        self.y_ind = tilemap.HEIGHT - 2
         self.x_vec = choice([-1, 0])
         self.y_vec = 0 if self.x_vec else -1
-        self.x = self.x_ind * tilemap.tile_size + self.x_vec * self.speed
-        self.y = self.y_ind * tilemap.tile_size + self.y_vec * self.speed
+        self.x = self.x_ind * tilemap.TILE_SIZE + self.x_vec * self.speed
+        self.y = self.y_ind * tilemap.TILE_SIZE + self.y_vec * self.speed
         self.changed_dir = 0
 
         # moves along occupied fields
@@ -158,8 +159,8 @@ class OrangeGhost(Ghost):
         self.id = 4
         self.x_ind = x_ind
         self.y_ind = y_ind
-        self.x = x_ind * tilemap.tile_size + 0.5 * tilemap.tile_size
-        self.y = y_ind * tilemap.tile_size + 0.5 * tilemap.tile_size
+        self.x = x_ind * tilemap.TILE_SIZE + 0.5 * tilemap.TILE_SIZE
+        self.y = y_ind * tilemap.TILE_SIZE + 0.5 * tilemap.TILE_SIZE
 
     # bounces off unoccupied fields and screen edges
     def check_collision(self):

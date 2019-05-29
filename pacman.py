@@ -9,7 +9,7 @@ class Pacman(MovingObject):
         super().__init__('images/pacman_prawo.png')
         self.speed = 4
         self.marked_tiles = []
-        self.LIVES = 5
+        self.LIVES = 2
         self.lives = self.LIVES
 
     def check_move(self):
@@ -44,11 +44,11 @@ class Pacman(MovingObject):
         if tilemap.tile_map[self.y_ind][self.x_ind] == 2:
             if y_ind == 2:
                 self.y_vec = max(0, self.y_vec)
-            elif y_ind == tilemap.height - 1:
+            elif y_ind == tilemap.HEIGHT - 1:
                 self.y_vec = min(0, self.y_vec)
             if x_ind == 0:
                 self.x_vec = max(0, self.x_vec)
-            elif x_ind == tilemap.width - 1:
+            elif x_ind == tilemap.WIDTH - 1:
                 self.x_vec = min(0, self.x_vec)
 
         # marks pacman path
@@ -69,6 +69,22 @@ class Pacman(MovingObject):
         else:
             self.x_ind, self.y_ind = new_x, new_y
 
+    def reset_position(self):
+        self.x_ind = 0
+        self.y_ind = 2
+
+        self.x = self.x_ind * tilemap.TILE_SIZE
+        self.y = self.y_ind * tilemap.TILE_SIZE
+
+        self.x_vec = 0
+        self.y_vec = 0
+
+        path = self.marked_tiles.copy()
+        del self.marked_tiles[:]
+        while path:
+            (x, y) = path.pop()
+            tilemap.tile_map[y][x] = 0
+
     def kill(self):
         self.lives -= 1
 
@@ -78,8 +94,8 @@ class Pacman(MovingObject):
         self.x_ind = 0
         self.y_ind = 2
 
-        self.x = self.x_ind * tilemap.tile_size
-        self.y = self.y_ind * tilemap.tile_size
+        self.x = self.x_ind * tilemap.TILE_SIZE
+        self.y = self.y_ind * tilemap.TILE_SIZE
 
         self.x_vec = 0
         self.y_vec = 0
