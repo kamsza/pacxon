@@ -52,6 +52,10 @@ class Ghost(MovingObject, ABC):
     def handle_collision(self, colliding_vec):
         pass
 
+    @abstractmethod
+    def fruit_action(self, number):
+        pass
+
 
 class BlueGhost(Ghost):
     def __init__(self, img='images/blue_ghost.png'):
@@ -80,6 +84,18 @@ class BlueGhost(Ghost):
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
+        else:
+            self.fruit_action(tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col])
+
+    def fruit_action(self, number):
+        if number == 11:
+            self.speed = 0
+        if number == 12:
+            self.speed = self.speed / 2
+        if number == 13:
+            self.speed = self.speed * 1.2
+        if number == 14:
+            self.speed = 0
 
 
 class RedGhost(BlueGhost):
@@ -104,6 +120,18 @@ class RedGhost(BlueGhost):
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
+        else:
+            self.fruit_action(tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col])
+
+    def fruit_action(self, number):
+        if number == 11:
+            self.speed = 0
+        if number == 12:
+            self.speed = self.speed / 2
+        if number == 13:
+            self.speed = self.speed * 1.2
+        if number == 14:
+            self.speed = 0
 
 
 class GreenGhost(Ghost):
@@ -148,6 +176,18 @@ class GreenGhost(Ghost):
                 self.y_vec = 0
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
+        else:
+            self.fruit_action(tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col])
+
+    def fruit_action(self, number):
+        if number == 11:
+            self.speed = 0
+        if number == 12:
+            self.speed = self.speed / 2
+        if number == 13:
+            self.speed = self.speed * 1.2
+        if number == 14:
+            self.speed = 0
 
 
 class OrangeGhost(Ghost):
@@ -180,6 +220,18 @@ class OrangeGhost(Ghost):
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
+        else:
+            self.fruit_action(tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col])
+
+    def fruit_action(self, number):
+        if number == 11:
+            self.speed = 0
+        if number == 12:
+            self.speed = self.speed / 2
+        if number == 13:
+            self.speed = self.speed * 1.2
+        if number == 14:
+            self.speed = 0
 
     def update_position(self, new_x, new_y):
         old_x, old_y = self.x_ind, self.y_ind

@@ -3,9 +3,11 @@ import ghost
 import pacman
 import stats
 import control
+import not_moving_objects
 
 player = None
 objects = list()
+#TODO lista na owoce
 
 orange_ghosts_num = 0
 

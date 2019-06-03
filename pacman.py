@@ -67,6 +67,7 @@ class Pacman(MovingObject):
     def update_position(self, new_x, new_y):
         if tilemap.tile_map[new_y][new_x] in [-1, 3, 4]:
             tilemap_objects.kill_player()
+        #TODO tutj sprawdzam jaki duszek
         else:
             self.x_ind, self.y_ind = new_x, new_y
 
