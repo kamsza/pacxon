@@ -67,7 +67,10 @@ class Pacman(MovingObject):
     def update_position(self, new_x, new_y):
         if tilemap.tile_map[new_y][new_x] in [-1, 3, 4]:
             tilemap_objects.kill_player()
-        #TODO tutj sprawdzam jaki duszek
+        if tilemap.tile_map[new_y][new_x] in [11, 12, 13, 14]:
+            tilemap_objects.execute_fruit_action(tilemap.tile_map[new_y][new_x])
+            self.fruit_action(tilemap.tile_map[new_y][new_x])
+            self.x_ind, self.y_ind = new_x, new_y
         else:
             self.x_ind, self.y_ind = new_x, new_y
 
@@ -86,3 +89,13 @@ class Pacman(MovingObject):
         while path:
             (x, y) = path.pop()
             tilemap.tile_map[y][x] = 0
+
+    def fruit_action(self, number):
+        if number == 11:
+            self.speed = 4
+        if number == 12:
+            self.speed = 6
+        if number == 13:
+            self.speed = 3
+        if number == 14:
+            self.speed = 4

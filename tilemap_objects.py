@@ -44,6 +44,17 @@ def add_orange_ghost(x_ind, y_ind):
     orange_ghosts_num -= 1
 
 
+def execute_fruit_action(number):
+    for o in objects:
+        o.fruit_action(number)
+
+
+def end_fruit_action():
+    for o in objects:
+        o.reset_speed
+
+
+
 def kill_player():
     player.reset_position()
     stats.player_lives -= 1
