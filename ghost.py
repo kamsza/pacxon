@@ -92,12 +92,14 @@ class BlueGhost(Ghost):
     def fruit_action(self, number):
         if number == 11:
             self.speed = 0
+            self.img = pygame.image.load('images/frozen_ghost.png')
         if number == 12:
             self.speed = 1.5
         if number == 13:
             self.speed = 4
         if number == 14:
             self.speed = 0
+            self.img = pygame.image.load('images/frozen_ghost.png')
         if number == 0:
             tilemap.tile_map[self.y][self.x] = 0
 
@@ -126,16 +128,17 @@ class RedGhost(BlueGhost):
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
 
-
     def fruit_action(self, number):
         if number == 11:
             self.speed = 0
+            self.img = pygame.image.load('images/frozen_ghost.png')
         if number == 12:
             self.speed = 4
         if number == 13:
             self.speed = 1.5
         if number == 14:
             self.speed = 0
+            self.img = pygame.image.load('images/frozen_ghost.png')
         if number == 0:
             tilemap.tile_map[self.y][self.x] = 0
 
@@ -183,16 +186,17 @@ class GreenGhost(Ghost):
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
 
-
     def fruit_action(self, number):
         if number == 11:
             self.speed = 0
+            self.img = pygame.image.load('images/frozen_ghost.png')
         if number == 12:
             self.speed = 4
         if number == 13:
             self.speed = 1.5
         if number == 14:
             self.speed = 0
+            self.img = pygame.image.load('images/frozen_ghost.png')
         if number == 0:
             tilemap.tile_map[self.y][self.x] = 0
 
@@ -228,16 +232,17 @@ class OrangeGhost(Ghost):
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
 
-
     def fruit_action(self, number):
         if number == 11:
             self.speed = 0
+            self.img = pygame.image.load('images/frozen_ghost.png')
         if number == 12:
             self.speed = 1.5
         if number == 13:
             self.speed = 4
         if number == 14:
             self.speed = 0
+            self.img = pygame.image.load('images/frozen_ghost.png')
         if number == 0:
             tilemap.tile_map[self.y][self.x] = 0
 

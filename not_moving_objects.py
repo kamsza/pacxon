@@ -27,13 +27,13 @@ class NotMovingObject(ABC):
 
 class Ntmo11(NotMovingObject):
 
-    def __init__(self, img='images/wisnia.png', number=11):
+    def __init__(self, img='images/green_free.png', number=11):
         super().__init__(img, number)
 
 
 class Ntmo12(NotMovingObject):
 
-    def __init__(self, img='images/wisnia.png', number=12):
+    def __init__(self, img='images/lemon_free.png', number=12):
         super().__init__(img, number)
 
 
@@ -45,7 +45,7 @@ class Ntmo13(NotMovingObject):
 
 class Ntmo14(NotMovingObject):
 
-    def __init__(self, img='images/wisnia.png', number=14):
+    def __init__(self, img='images/cherry_free.png', number=14):
         super().__init__(img, number)
 
 

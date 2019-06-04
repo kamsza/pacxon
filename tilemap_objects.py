@@ -26,8 +26,8 @@ def init():
     for i in range(stats.green_ghosts_num):
         objects.append(ghost.GreenGhost())
 
-
     orange_ghosts_num = stats.orange_ghosts_num
+    objects.append(not_moving_objects.Ntmo11())
 
 
 def action():
