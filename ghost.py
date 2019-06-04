@@ -87,8 +87,7 @@ class BlueGhost(Ghost):
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
-        else:
-            self.fruit_action(0)
+
 
     def fruit_action(self, number):
         if number == 11:
@@ -126,8 +125,7 @@ class RedGhost(BlueGhost):
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
-        else:
-            self.fruit_action(0)
+
 
     def fruit_action(self, number):
         if number == 11:
@@ -184,8 +182,7 @@ class GreenGhost(Ghost):
                 self.y_vec = 0
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
-        else:
-            self.fruit_action(0)
+
 
     def fruit_action(self, number):
         if number == 11:
@@ -230,8 +227,7 @@ class OrangeGhost(Ghost):
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
-        else:
-            self.fruit_action(0)
+
 
     def fruit_action(self, number):
         if number == 11:
