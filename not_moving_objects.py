@@ -34,7 +34,12 @@ def erase_from_a_map(x, y):
 
 def control_fruit():
     while not control.done:
-        time.sleep(random.randint(2, 10))
+        t = random.randint(2, 10)
+        while t:
+            time.sleep(1)
+            if control.done:
+                return
+            t -= 1
         x, y = get_position()
         draw_on_a_map(x, y)
         time.sleep(random.randint(4, 6))
@@ -49,11 +54,6 @@ def start_fruit_thread():
     thread_2.start()
     thread_3 = threading.Thread(target=control_fruit)
     thread_3.start()
-
-
-def end_fruit_thread():
-    global thread_1, thread_2, thread_3
-    thread.join()
 
 
 def fruit_action(id):
