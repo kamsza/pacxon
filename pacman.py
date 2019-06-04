@@ -99,3 +99,6 @@ class Pacman(MovingObject):
             self.speed = 3
         if number == 14:
             self.speed = 4
+
+    def reset_speed(self):
+        self.speed = 4

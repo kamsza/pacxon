@@ -52,7 +52,7 @@ def execute_fruit_action(number):
 def end_fruit_action():
     for o in objects:
         o.reset_speed
-
+    player.reset_speed
 
 
 def kill_player():
