@@ -12,6 +12,7 @@ class Pacman(MovingObject):
         self.marked_tiles = []
         self.LIVES = 2
         self.lives = self.LIVES
+        self.steps = 0
 
     def check_move(self):
         x_ind = tilemap.row_num(self.x + self.img_width / 2)
@@ -20,6 +21,10 @@ class Pacman(MovingObject):
 
         key = pygame.key.get_pressed()
 
+        if self.steps != 0:
+            self.steps -= 1
+            if self.steps == 0:
+                self.speed = 4
         # pacman can stop only if is on occupied tile
         if tilemap.tile_map[y_ind][x_ind]:
             direction = (0, 0)
@@ -70,6 +75,7 @@ class Pacman(MovingObject):
         if tilemap.tile_map[new_y][new_x] in [11, 12, 13, 14]:
             tilemap_objects.execute_fruit_action(tilemap.tile_map[new_y][new_x])
             self.fruit_action(tilemap.tile_map[new_y][new_x])
+            self.steps = 10
             self.x_ind, self.y_ind = new_x, new_y
         else:
             self.x_ind, self.y_ind = new_x, new_y
@@ -101,4 +107,5 @@ class Pacman(MovingObject):
             self.speed = 4
 
     def reset_speed(self):
+
         self.speed = 4

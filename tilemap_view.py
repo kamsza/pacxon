@@ -3,6 +3,10 @@ import tilemap
 import stats
 
 textures = {
+    14: pygame.image.load('images/apple_free.png'), # apple fruit
+    13: pygame.image.load('images/sherry_free.png'), # sherry fruit
+    12: pygame.image.load('images/green_free.png'), # green fruit
+    11: pygame.image.load('images/lemon_free.png'), # lemon fruit
     5: pygame.image.load('images/upper_bar.png'),   # statistics
     4: pygame.image.load('images/occ.png'),         # orange ghost
     3: pygame.image.load('images/marked.png'),      # pacman trace
