@@ -3,16 +3,14 @@ import tilemap
 import control
 import tilemap_objects
 from moving_objects import MovingObject
+import not_moving_objects
 
 
 class Pacman(MovingObject):
     def __init__(self):
         super().__init__('images/pacman_prawo.png')
-        self.speed = 4
+        self.speed = 6
         self.marked_tiles = []
-        self.LIVES = 2
-        self.lives = self.LIVES
-        self.steps = 0
 
     def check_move(self):
         x_ind = tilemap.row_num(self.x + self.img_width / 2)
@@ -21,12 +19,8 @@ class Pacman(MovingObject):
 
         key = pygame.key.get_pressed()
 
-        if self.steps != 0:
-            self.steps -= 1
-            if self.steps == 0:
-                self.speed = 4
         # pacman can stop only if is on occupied tile
-        if tilemap.tile_map[y_ind][x_ind]:
+        if tilemap.tile_map[y_ind][x_ind] not in [0, 11, 12, 13, 14]:
             direction = (0, 0)
         else:
             direction = (self.x_vec, self.y_vec)
@@ -57,11 +51,15 @@ class Pacman(MovingObject):
             elif x_ind == tilemap.WIDTH - 1:
                 self.x_vec = min(0, self.x_vec)
 
+        # pacman got a fruit
+        if tilemap.tile_map[self.y_ind][self.x_ind] in [11, 12, 13, 14]:
+            not_moving_objects.fruit_action(tilemap.tile_map[self.y_ind][self.x_ind])
+
         # marks pacman path
         self.mark_tile(x_ind, y_ind)
 
     def mark_tile(self, x_ind, y_ind):
-        if tilemap.tile_map[y_ind][x_ind] == 0:
+        if tilemap.tile_map[y_ind][x_ind] in [0, 11, 12, 13, 14]:
             tilemap.tile_map[y_ind][x_ind] = 3
             self.marked_tiles.append((x_ind, y_ind))
         elif self.marked_tiles:
@@ -72,11 +70,10 @@ class Pacman(MovingObject):
     def update_position(self, new_x, new_y):
         if tilemap.tile_map[new_y][new_x] in [-1, 3, 4]:
             tilemap_objects.kill_player()
-        if tilemap.tile_map[new_y][new_x] in [11, 12, 13, 14]:
-            tilemap_objects.execute_fruit_action(tilemap.tile_map[new_y][new_x])
-            self.fruit_action(tilemap.tile_map[new_y][new_x])
-            self.steps = 10
-            self.x_ind, self.y_ind = new_x, new_y
+        # if tilemap.tile_map[new_y][new_x] in [11, 12, 13, 14]:
+        #     tilemap_objects.execute_fruit_action(tilemap.tile_map[new_y][new_x])
+        #     self.fruit_action(tilemap.tile_map[new_y][new_x])
+        #     self.x_ind, self.y_ind = new_x, new_y
         else:
             self.x_ind, self.y_ind = new_x, new_y
 
@@ -95,17 +92,3 @@ class Pacman(MovingObject):
         while path:
             (x, y) = path.pop()
             tilemap.tile_map[y][x] = 0
-
-    def fruit_action(self, number):
-        if number == 11:
-            self.speed = 4
-        if number == 12:
-            self.speed = 6
-        if number == 13:
-            self.speed = 3
-        if number == 14:
-            self.speed = 4
-
-    def reset_speed(self):
-
-        self.speed = 4

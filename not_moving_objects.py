@@ -1,45 +1,77 @@
 import pygame
 import tilemap
 from abc import ABC
-from random import randint
+import random
+import threading
+import time
+import control
+import tilemap_objects
 
 
-# abstract class
-class NotMovingObject(ABC):
-    def __init__(self, number):
-        self.width = tilemap.TILE_SIZE
-        self.height = tilemap.TILE_SIZE
-        self.x = randint(1, tilemap.WIDTH-1)
-        self.y = randint(3, tilemap.HEIGHT-1)
-        self.number = number
-        self.taken = tilemap.tile_map[self.y][self.x]
+thread_1 = None
+thread_2 = None
+thread_3 = None
 
-    def draw(self):
-        tilemap.tile_map[self.y][self.x] = self.number
-
-    def action(self):
-        self.draw()
+ID_LIST = [11, 12, 13, 14]
 
 
-class Lemon(NotMovingObject):
+def get_position():
+    x = random.randint(3, tilemap.WIDTH - 3)
+    y = random.randint(5, tilemap.HEIGHT - 5)
 
-    def __init__(self, number=11):
-        super().__init__(number)
-
-
-class Green(NotMovingObject):
-
-    def __init__(self, number=12):
-        super().__init__(number)
+    while tilemap.tile_map[y][x]:
+        x = random.randint(3, tilemap.WIDTH - 3)
+        y = random.randint(5, tilemap.HEIGHT - 5)
+    return x, y
 
 
-class Sherry(NotMovingObject):
+def draw_on_a_map(x, y):
+    id = random.choice(ID_LIST)
+    tilemap.tile_map[y][x] = id
 
-    def __init__(self, number=13):
-        super().__init__(number)
+def erase_from_a_map(x, y):
+    tilemap.tile_map[y][x] = tilemap.tile_map[y][x+1]
+
+def control_fruit():
+    while not control.done:
+        time.sleep(random.randint(2, 10))
+        x, y = get_position()
+        draw_on_a_map(x, y)
+        time.sleep(random.randint(4, 6))
+        erase_from_a_map(x, y)
 
 
-class Apple(NotMovingObject):
+def start_fruit_thread():
+    global thread_1, thread_2, thread_3
+    thread_1 = threading.Thread(target=control_fruit)
+    thread_1.start()
+    thread_2 = threading.Thread(target=control_fruit)
+    thread_2.start()
+    thread_3 = threading.Thread(target=control_fruit)
+    thread_3.start()
 
-    def __init__(self, number=14):
-        super().__init__(number)
+
+def end_fruit_thread():
+    global thread_1, thread_2, thread_3
+    thread.join()
+
+
+def fruit_action(id):
+    thread = threading.Thread(target=control_action, args=(id,))
+    thread.start()
+
+
+def control_action(id):
+    if id == 11:
+        tilemap_objects.set_pacman_speed(12)
+    if id == 12:
+        tilemap_objects.set_pacman_speed(12)
+    if id == 13:
+        tilemap_objects.set_ghost_speed(0)
+    if id == 13:
+        tilemap_objects.set_ghost_speed(0)
+
+    time.sleep(5)
+
+    tilemap_objects.set_pacman_speed(6)
+    tilemap_objects.set_ghost_speed(3)

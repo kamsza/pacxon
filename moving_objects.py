@@ -28,6 +28,9 @@ class MovingObject(ABC):
         self.x += self.speed * self.x_vec
         self.y += self.speed * self.y_vec
 
+    def set_speed(self, speed):
+        self.speed = speed
+
     @abstractmethod
     def check_move(self):
         pass

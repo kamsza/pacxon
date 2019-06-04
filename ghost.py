@@ -18,16 +18,12 @@ class Ghost(MovingObject, ABC):
         self.y_vec = choice([-1, 1])
         self.x_ind = tilemap.row_num(self.x)
         self.y_ind = tilemap.col_num(self.y)
-        self.steps = 0
 
     def check_move(self):
         x_ind = tilemap.row_num(self.x + self.img_width / 2)
         y_ind = tilemap.col_num(self.y + self.img_height / 2)
         self.update_position(x_ind, y_ind)
-        if self.steps != 0:
-            self.steps -= 1
-            if self.steps == 0:
-                self.speed = 3
+
         collisions = 0
         collides = self.check_collision()
         while collides:
@@ -49,10 +45,6 @@ class Ghost(MovingObject, ABC):
         self.x_ind, self.y_ind = new_x, new_y
 
     @abstractmethod
-    def reset_speed(self):
-        pass
-
-    @abstractmethod
     def check_collision(self):
         pass
 
@@ -60,9 +52,9 @@ class Ghost(MovingObject, ABC):
     def handle_collision(self, colliding_vec):
         pass
 
-    @abstractmethod
-    def fruit_action(self, number):
-        pass
+    # @abstractmethod
+    # def fruit_action(self, number):
+    #     pass
 
 
 class BlueGhost(Ghost):
@@ -92,24 +84,8 @@ class BlueGhost(Ghost):
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
-
-    def fruit_action(self, number):
-        self.steps = 10
-        if number == 11:
-            self.speed = 0
-            self.img = pygame.image.load('images/frozen_ghost.png')
-        if number == 12:
-            self.speed = 1.5
-        if number == 13:
-            self.speed = 4
-        if number == 14:
-            self.speed = 0
-            self.img = pygame.image.load('images/frozen_ghost.png')
-
-    def reset_speed(self):
-        self.speed = 3
-        self.img = pygame.image.load('images/blue_ghost.png')
-
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] in [11, 12, 13, 14]:
+            tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] = 0
 
 class RedGhost(BlueGhost):
     def __init__(self):
@@ -133,23 +109,8 @@ class RedGhost(BlueGhost):
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
-
-    def fruit_action(self, number):
-        self.steps = 10
-        if number == 11:
-            self.speed = 1.5
-            #self.img = pygame.image.load('images/frozen_ghost.png')
-        if number == 12:
-            self.speed = 4
-        if number == 13:
-            self.speed = 1.5
-        if number == 14:
-            self.speed = 0
-            self.img = pygame.image.load('images/frozen_ghost.png')
-
-    def reset_speed(self):
-        self.speed = 3
-        self.img = pygame.image.load('images/red_ghost.png')
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] in [11, 12, 13, 14]:
+            tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] = 0
 
 
 class GreenGhost(Ghost):
@@ -194,23 +155,9 @@ class GreenGhost(Ghost):
                 self.y_vec = 0
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] in [11, 12, 13, 14]:
+            tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] = 0
 
-    def fruit_action(self, number):
-        self.steps = 10
-        if number == 11:
-            self.speed = 0
-            self.img = pygame.image.load('images/frozen_ghost.png')
-        if number == 12:
-            self.speed = 4
-        if number == 13:
-            self.speed = 1.5
-        if number == 14:
-            self.speed = 0
-            self.img = pygame.image.load('images/frozen_ghost.png')
-
-    def reset_speed(self):
-        self.speed = 3
-        self.img = pygame.image.load('images/green_ghost.png')
 
 
 class OrangeGhost(Ghost):
@@ -243,26 +190,13 @@ class OrangeGhost(Ghost):
                 self.y_vec = -self.y_vec
         if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] == 3:
             tilemap_objects.kill_player()
+        if tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] in [11, 12, 13, 14]:
+            tilemap.tile_map[self.y_ind + y_col][self.x_ind + x_col] = 1
 
-    def fruit_action(self, number):
-        self.steps = 10
-        if number == 11:
-            self.speed = 0
-            self.img = pygame.image.load('images/frozen_ghost.png')
-        if number == 12:
-            self.speed = 1.5
-        if number == 13:
-            self.speed = 4
-        if number == 14:
-            self.speed = 0
-            self.img = pygame.image.load('images/frozen_ghost.png')
+
 
     def update_position(self, new_x, new_y):
         old_x, old_y = self.x_ind, self.y_ind
         tilemap.tile_map[old_y][old_x] = 1
         tilemap.tile_map[new_y][new_x] = self.id
         self.x_ind, self.y_ind = new_x, new_y
-
-    def reset_speed(self):
-        self.speed = 3
-        self.img = pygame.image.load('images/orange_ghost.png')

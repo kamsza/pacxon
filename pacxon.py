@@ -3,27 +3,27 @@ import tilemap
 import control
 import tilemap_view
 import tilemap_objects
+import stats
 import not_moving_objects
 
 
 clock = pygame.time.Clock()
 
+
 pygame.init()
 
-#tilemap.init_from_file("default_tile_map.txt")
-tilemap.init(43, 28)
-tilemap_objects.init()
-a = 1
+control.start_game()
+
 while not control.done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            tilemap_objects.del_fruit_threads()
+            not_moving_objects.end_fruit_thread()
             control.done = True
+            quit()
 
     tilemap_view.draw()
 
     tilemap_objects.action()
-    tilemap_objects.add_fruit()
 
     pygame.display.update()
     pygame.display.flip()
