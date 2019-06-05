@@ -5,9 +5,7 @@ import tilemap_view
 import tilemap_objects
 import stats
 
-
 clock = pygame.time.Clock()
-
 
 pygame.init()
 
