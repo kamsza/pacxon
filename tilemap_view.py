@@ -5,10 +5,10 @@ import time
 
 
 textures = {
-    14: pygame.image.load('images/apple.png'),   # apple fruit
-    13: pygame.image.load('images/sherry.png'),  # sherry fruit
-    12: pygame.image.load('images/green.png'),  # green fruit
-    11: pygame.image.load('images/lemon.png'),  # lemon fruit
+    14: pygame.image.load('images/apple.png'),      # apple fruit
+    13: pygame.image.load('images/sherry.png'),     # sherry fruit
+    12: pygame.image.load('images/green.png'),      # green fruit
+    11: pygame.image.load('images/lemon.png'),      # lemon fruit
     5: pygame.image.load('images/upper_bar.png'),   # statistics
     4: pygame.image.load('images/occ.png'),         # orange ghost
     3: pygame.image.load('images/marked.png'),      # pacman trace

@@ -8,6 +8,7 @@ import stats
 clock = pygame.time.Clock()
 
 pygame.init()
+pygame.display.set_caption('PACXON')
 
 control.start_game()
 

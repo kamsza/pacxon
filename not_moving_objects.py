@@ -8,10 +8,6 @@ import control
 import tilemap_objects
 
 
-thread_1 = None
-thread_2 = None
-thread_3 = None
-
 ID_LIST = [11, 12, 13, 14]
 
 
@@ -47,12 +43,11 @@ def control_fruit():
 
 
 def start_fruit_thread():
-    global thread_1, thread_2, thread_3
-    thread_1 = threading.Thread(target=control_fruit)
+    thread_1 = threading.Thread(target=control_fruit, daemon = True)
     thread_1.start()
-    thread_2 = threading.Thread(target=control_fruit)
+    thread_2 = threading.Thread(target=control_fruit, daemon = True)
     thread_2.start()
-    thread_3 = threading.Thread(target=control_fruit)
+    thread_3 = threading.Thread(target=control_fruit, daemon = True)
     thread_3.start()
 
 

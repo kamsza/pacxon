@@ -72,7 +72,6 @@ def check_loss_decorator(function):
             control.game_over()
             stats.player_lives = stats.lives
             player.reset_position()
-            print("LOSS")
         else:
             return func
     return wrapper

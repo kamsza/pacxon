@@ -52,9 +52,6 @@ class Ghost(MovingObject, ABC):
     def handle_collision(self, colliding_vec):
         pass
 
-    # @abstractmethod
-    # def fruit_action(self, number):
-    #     pass
 
 
 class BlueGhost(Ghost):
